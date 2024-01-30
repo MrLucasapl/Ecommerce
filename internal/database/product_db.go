@@ -15,7 +15,7 @@ func NewProductDB(db *sql.DB) *ProductDB {
 }
 
 func (pd *ProductDB) GetProducts() ([]*entity.Product, error) {
-	rows, err := pd.db.Query("SELECT id, name, price, category_id FROM products")
+	rows, err := pd.db.Query("SELECT id, name, description, price, category_id, image_url FROM products")
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (pd *ProductDB) GetProducts() ([]*entity.Product, error) {
 	var products []*entity.Product
 	for rows.Next() {
 		var product entity.Product
-		if err := rows.Scan(&product.ID, &product.Name, &product.Price, &product.CategoryID); err != nil {
+		if err := rows.Scan(&product.ID, &product.Name, &product.Description, &product.Price, &product.CategoryID, &product.ImageURL); err != nil {
 			return nil, err
 		}
 		products = append(products, &product)
@@ -34,8 +34,8 @@ func (pd *ProductDB) GetProducts() ([]*entity.Product, error) {
 
 func (pd *ProductDB) GetProduct(id string) (*entity.Product, error) {
 	var product entity.Product
-	err := pd.db.QueryRow("SELECT id, name, price, category_id, image_url FROM products WHERE id=?", id).
-		Scan(&product.ID, &product.Name, &product.Price, &product.CategoryID, &product.ImageURL)
+	err := pd.db.QueryRow("SELECT id, name, description, price, category_id, image_url FROM products WHERE id=?", id).
+		Scan(&product.ID, &product.Name, &product.Description, &product.Price, &product.CategoryID, &product.ImageURL)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func (pd *ProductDB) GetProduct(id string) (*entity.Product, error) {
 }
 
 func (pd *ProductDB) GetProductByCategoryID(categoryID string) ([]*entity.Product, error) {
-	rows, err := pd.db.Query("SELECT id, , description, price, category_id, image_url FROM products where category_id = ?", categoryID)
+	rows, err := pd.db.Query("SELECT id, name, description, price, category_id, image_url FROM products where category_id = ?", categoryID)
 	if err != nil {
 		return nil, err
 	}
