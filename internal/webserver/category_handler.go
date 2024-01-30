@@ -49,7 +49,7 @@ func (wch *WebCategoryHandler) CreateCategory(w http.ResponseWriter, r *http.Req
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	result, err := wch.CategoryService.GetCategory(category.Name)
+	result, err := wch.CategoryService.CreateCategory(category.Name)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
